@@ -1,6 +1,8 @@
 import 'package:agenda/comum/consts.dart';
+import 'package:agenda/factories/view/button_abstract.dart';
 import 'package:agenda/factories/view/category_field.dart';
 import 'package:agenda/factories/view/registration_field.dart';
+import 'package:agenda/factories/view/slider_field.dart';
 import 'package:flutter/material.dart';
 
 class NewTaskScreen extends StatefulWidget {
@@ -40,6 +42,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       nameField: 'Horário de início',
                     ).create(),
                   ),
+                  const SizedBox(width: 30,),
                   Expanded(
                     child: RegistrationField(
                       nameField: 'Horário de início',
@@ -47,7 +50,14 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                   ),
                 ],
               ),
-              CategoryField(nameField: 'Categoria').create(),
+              //CategoryField(nameField: 'Categoria').create(),
+              SliderField(nameField: 'Sessões de trabalho').create(),
+              SliderField(nameField: 'Duração de sessões').create(),
+              ButtonAbstract(
+                nameButton: 'Salvar', 
+                color: colorAppBar,
+                onPressed: () {},
+              ).create(),
             ],
           ),
         ),
