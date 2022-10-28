@@ -3,17 +3,30 @@ import 'package:agenda/factories/view/registration_abstract.dart';
 import 'package:flutter/material.dart';
 
 class SliderField extends RegistrationAbstract {
-  SliderField({required String? nameField}) : super(nameField: nameField);
+  double? valueStore;
+  double? min;
+  double? max;
+  int? divisions;
+  void Function(double)? onChanged;
+  SliderField({
+    required this.valueStore,
+    required this.min,
+    required this.max,
+    required this.divisions,
+    required String? nameField,
+    required this.onChanged,
+  }) : super(nameField: nameField);
 
   @override
   Widget build() {
     return Slider(
       activeColor: colorAppBar,
-      value: 1,
-      max: 10,
-      divisions: 3,
-      onChanged: (value){},
+      value: valueStore!,
+      min: min!,
+      max: max!,
+      label: valueStore!.round().toString(),
+      divisions: divisions,
+      onChanged: onChanged,
     );
   }
-
 }

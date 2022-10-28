@@ -3,16 +3,30 @@ import 'package:agenda/factories/view/button_abstract.dart';
 import 'package:agenda/factories/view/category_field.dart';
 import 'package:agenda/factories/view/registration_field.dart';
 import 'package:agenda/factories/view/slider_field.dart';
+import 'package:agenda/stores/registration_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:intl/intl.dart';
 
 class NewTaskScreen extends StatefulWidget {
-  const NewTaskScreen({ Key? key }) : super(key: key);
+  const NewTaskScreen({Key? key}) : super(key: key);
 
   @override
   State<NewTaskScreen> createState() => _NewTaskScreenState();
 }
 
 class _NewTaskScreenState extends State<NewTaskScreen> {
+  final _registrationStore = RegistrationStore();
+  final _nameTaskController = TextEditingController();
+  final _dateController = TextEditingController();
+  final _initHourController = TextEditingController();
+  final _endHourController = TextEditingController();
+  @override
+  void initState() {
+    _dateController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,31 +44,70 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           child: Column(
             children: [
               RegistrationField(
+                controller: _nameTaskController,
                 nameField: 'Nome da tarefa',
               ).create(),
               RegistrationField(
                 nameField: 'Data',
+                controller: _dateController,
+                iconButton: IconButton(
+                  onPressed: () async {
+                    await _selectDateTask(_dateController, context);
+                  },
+                  icon: const Icon(Icons.calendar_month),
+                ),
               ).create(),
               Row(
                 children: [
                   Expanded(
                     child: RegistrationField(
                       nameField: 'Horário de início',
+                      controller: _initHourController,
+                      onTap: () async {
+                        await _selectHourTask(_initHourController, context);
+                      },
+                      enable: false,
                     ).create(),
                   ),
-                  const SizedBox(width: 30,),
+                  const SizedBox(
+                    width: 30,
+                  ),
                   Expanded(
                     child: RegistrationField(
-                      nameField: 'Horário de início',
-                    ).create(),
+                        nameField: 'Horário de início',
+                        controller: _endHourController,
+                        enable: false,
+                        onTap: () async {
+                          await _selectHourTask(_endHourController, context);
+                        }).create(),
                   ),
                 ],
               ),
               //CategoryField(nameField: 'Categoria').create(),
-              SliderField(nameField: 'Sessões de trabalho').create(),
-              SliderField(nameField: 'Duração de sessões').create(),
+              Observer(builder: (_) {
+                return SliderField(
+                    min: 1,
+                    max: 10,
+                    divisions: 3,
+                    nameField: 'Sessões de trabalho',
+                    valueStore: _registrationStore.session,
+                    onChanged: (value) {
+                      _registrationStore.setSessions(value);
+                    }).create();
+              }),
+              Observer(builder: (_) {
+                return SliderField(
+                    min: 1,
+                    max: 40,
+                    divisions: 5,
+                    nameField: 'Duração de sessões',
+                    valueStore: _registrationStore.duration,
+                    onChanged: (value) {
+                      _registrationStore.setDuration(value);
+                    }).create();
+              }),
               ButtonAbstract(
-                nameButton: 'Salvar', 
+                nameButton: 'Salvar',
                 color: colorAppBar,
                 onPressed: () {},
               ).create(),
@@ -64,4 +117,24 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       ),
     );
   }
+}
+
+Future<void> _selectDateTask(controller, context) async {
+  final _date = await showDatePicker(
+    locale: const Locale('pt', 'BR'),
+    context: context,
+    initialDate: DateTime.now(),
+    firstDate: DateTime(2015),
+    lastDate: DateTime(2050),
+  );
+  String _dateFormat = DateFormat('dd/MM/yyyy').format(_date!);
+  controller.text = _dateFormat;
+}
+
+Future<void> _selectHourTask(controller, context) async {
+  final _hourTask = await showTimePicker(
+    context: context,
+    initialTime: TimeOfDay.now(),
+  );
+  controller.text = _hourTask!.format(context);
 }

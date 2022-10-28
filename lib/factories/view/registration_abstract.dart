@@ -30,5 +30,6 @@ abstract class RegistrationAbstract {
       ),
     );
   }
+
   Widget build();
 }
