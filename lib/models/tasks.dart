@@ -1,4 +1,5 @@
 class Tasks {
+  int? id;
   String? nameTask;
   String? dateTask;
   String? initHour;
@@ -7,6 +8,7 @@ class Tasks {
   int? durationSession;
 
   Tasks({
+    this.id,
     required this.nameTask,
     required this.dateTask,
     required this.initHour,
@@ -16,6 +18,7 @@ class Tasks {
   });
 
   factory Tasks.fromJson(Map<String, dynamic> map) => Tasks(
+        id: map['id'],
         nameTask: map['name'],
         dateTask: map['date'],
         initHour: map['initHour'],
@@ -26,6 +29,7 @@ class Tasks {
 
   Map<String, dynamic> toJson() {
     var aux = <String, dynamic>{
+      'id': id,
       'name': nameTask,
       'date': dateTask,
       'initHour': initHour,
