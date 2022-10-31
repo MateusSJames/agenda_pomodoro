@@ -50,12 +50,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
               RegistrationField(
                 nameField: 'Data',
                 controller: _dateController,
-                iconButton: IconButton(
-                  onPressed: () async {
-                    await _selectDateTask(_dateController, context);
-                  },
-                  icon: const Icon(Icons.calendar_month),
-                ),
+                onTap: () async {
+                  await _selectDateTask(_dateController, context);
+                },
+                enable: false,
               ).create(),
               Row(
                 children: [
@@ -74,7 +72,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                   ),
                   Expanded(
                     child: RegistrationField(
-                        nameField: 'Horário de início',
+                        nameField: 'Horário de término',
                         controller: _endHourController,
                         enable: false,
                         onTap: () async {
