@@ -15,8 +15,9 @@ class NewTaskScreen extends StatefulWidget {
   State<NewTaskScreen> createState() => _NewTaskScreenState();
 }
 
+final _registrationStore = RegistrationStore();
+
 class _NewTaskScreenState extends State<NewTaskScreen> {
-  final _registrationStore = RegistrationStore();
   final _nameTaskController = TextEditingController();
   final _dateController = TextEditingController();
   final _initHourController = TextEditingController();
@@ -24,6 +25,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   @override
   void initState() {
     _dateController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
+    _registrationStore.setTaskDate(_dateController.text);
     super.initState();
   }
 
@@ -46,6 +48,9 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
               RegistrationField(
                 controller: _nameTaskController,
                 nameField: 'Nome da tarefa',
+                onChanged: (value) {
+                  _registrationStore.setTaskName(value);
+                }
               ).create(),
               RegistrationField(
                 nameField: 'Data',
@@ -63,6 +68,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       controller: _initHourController,
                       onTap: () async {
                         await _selectHourTask(_initHourController, context);
+                        _registrationStore.setTaskInitHour(_initHourController.text);
                       },
                       enable: false,
                     ).create(),
@@ -77,6 +83,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                         enable: false,
                         onTap: () async {
                           await _selectHourTask(_endHourController, context);
+                          _registrationStore.setTaskEndHour(_endHourController.text);
                         }).create(),
                   ),
                 ],
@@ -104,11 +111,21 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       _registrationStore.setDuration(value);
                     }).create();
               }),
-              ButtonAbstract(
-                nameButton: 'Salvar',
-                color: colorAppBar,
-                onPressed: () {},
-              ).create(),
+              Observer(builder: (_) {
+                if(_registrationStore.loadingNewTask) {
+                  return CircularProgressIndicator(
+                    color: colorAppBar,
+                  );
+                } else {
+                  return ButtonAbstract(
+                    nameButton: 'Salvar',
+                    color: colorAppBar,
+                    onPressed: () {
+                      _registrationStore.insertTask();
+                    },
+                  ).create();
+                }
+              }),
             ],
           ),
         ),
@@ -127,6 +144,7 @@ Future<void> _selectDateTask(controller, context) async {
   );
   String _dateFormat = DateFormat('dd/MM/yyyy').format(_date!);
   controller.text = _dateFormat;
+  _registrationStore.setTaskDate(_dateFormat);
 }
 
 Future<void> _selectHourTask(controller, context) async {

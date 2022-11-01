@@ -6,12 +6,14 @@ class RegistrationField extends RegistrationAbstract {
   TextEditingController? controller;
   bool? enable;
   GestureTapCallback? onTap;
+  void Function(String)? onChanged;
   RegistrationField({
     required String? nameField,
     this.controller,
     this.iconButton,
     this.enable,
     this.onTap,
+    this.onChanged,
   }) : super(nameField: nameField);
 
   @override
@@ -26,6 +28,7 @@ class RegistrationField extends RegistrationAbstract {
           isDense: true,
           suffixIcon: iconButton,
         ),
+        onChanged: onChanged,
       ),
     );
   }

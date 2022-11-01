@@ -9,6 +9,70 @@ part of 'registration_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$RegistrationStore on _RegistrationStore, Store {
+  late final _$nameTaskAtom =
+      Atom(name: '_RegistrationStore.nameTask', context: context);
+
+  @override
+  String get nameTask {
+    _$nameTaskAtom.reportRead();
+    return super.nameTask;
+  }
+
+  @override
+  set nameTask(String value) {
+    _$nameTaskAtom.reportWrite(value, super.nameTask, () {
+      super.nameTask = value;
+    });
+  }
+
+  late final _$dateTaskAtom =
+      Atom(name: '_RegistrationStore.dateTask', context: context);
+
+  @override
+  String get dateTask {
+    _$dateTaskAtom.reportRead();
+    return super.dateTask;
+  }
+
+  @override
+  set dateTask(String value) {
+    _$dateTaskAtom.reportWrite(value, super.dateTask, () {
+      super.dateTask = value;
+    });
+  }
+
+  late final _$initHourTaskAtom =
+      Atom(name: '_RegistrationStore.initHourTask', context: context);
+
+  @override
+  String get initHourTask {
+    _$initHourTaskAtom.reportRead();
+    return super.initHourTask;
+  }
+
+  @override
+  set initHourTask(String value) {
+    _$initHourTaskAtom.reportWrite(value, super.initHourTask, () {
+      super.initHourTask = value;
+    });
+  }
+
+  late final _$endHourTaskAtom =
+      Atom(name: '_RegistrationStore.endHourTask', context: context);
+
+  @override
+  String get endHourTask {
+    _$endHourTaskAtom.reportRead();
+    return super.endHourTask;
+  }
+
+  @override
+  set endHourTask(String value) {
+    _$endHourTaskAtom.reportWrite(value, super.endHourTask, () {
+      super.endHourTask = value;
+    });
+  }
+
   late final _$sessionAtom =
       Atom(name: '_RegistrationStore.session', context: context);
 
@@ -41,8 +105,76 @@ mixin _$RegistrationStore on _RegistrationStore, Store {
     });
   }
 
+  late final _$loadingNewTaskAtom =
+      Atom(name: '_RegistrationStore.loadingNewTask', context: context);
+
+  @override
+  bool get loadingNewTask {
+    _$loadingNewTaskAtom.reportRead();
+    return super.loadingNewTask;
+  }
+
+  @override
+  set loadingNewTask(bool value) {
+    _$loadingNewTaskAtom.reportWrite(value, super.loadingNewTask, () {
+      super.loadingNewTask = value;
+    });
+  }
+
+  late final _$insertTaskAsyncAction =
+      AsyncAction('_RegistrationStore.insertTask', context: context);
+
+  @override
+  Future<void> insertTask() {
+    return _$insertTaskAsyncAction.run(() => super.insertTask());
+  }
+
   late final _$_RegistrationStoreActionController =
       ActionController(name: '_RegistrationStore', context: context);
+
+  @override
+  void setTaskName(dynamic value) {
+    final _$actionInfo = _$_RegistrationStoreActionController.startAction(
+        name: '_RegistrationStore.setTaskName');
+    try {
+      return super.setTaskName(value);
+    } finally {
+      _$_RegistrationStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setTaskDate(dynamic value) {
+    final _$actionInfo = _$_RegistrationStoreActionController.startAction(
+        name: '_RegistrationStore.setTaskDate');
+    try {
+      return super.setTaskDate(value);
+    } finally {
+      _$_RegistrationStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setTaskInitHour(dynamic value) {
+    final _$actionInfo = _$_RegistrationStoreActionController.startAction(
+        name: '_RegistrationStore.setTaskInitHour');
+    try {
+      return super.setTaskInitHour(value);
+    } finally {
+      _$_RegistrationStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setTaskEndHour(dynamic value) {
+    final _$actionInfo = _$_RegistrationStoreActionController.startAction(
+        name: '_RegistrationStore.setTaskEndHour');
+    try {
+      return super.setTaskEndHour(value);
+    } finally {
+      _$_RegistrationStoreActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   void setSessions(dynamic value) {
@@ -69,8 +201,13 @@ mixin _$RegistrationStore on _RegistrationStore, Store {
   @override
   String toString() {
     return '''
+nameTask: ${nameTask},
+dateTask: ${dateTask},
+initHourTask: ${initHourTask},
+endHourTask: ${endHourTask},
 session: ${session},
-duration: ${duration}
+duration: ${duration},
+loadingNewTask: ${loadingNewTask}
     ''';
   }
 }

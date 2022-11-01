@@ -16,7 +16,7 @@ class ButtonAbstract {
       width: 170,
       height: 40,
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(primary: color),
+        style: ElevatedButton.styleFrom(backgroundColor: color),
         onPressed: onPressed,
         child: Text(nameButton),
       ),
