@@ -10,6 +10,9 @@ abstract class _RegistrationStore with Store {
   final _taskService = TaskService();
 
   @observable
+  ObservableList<Tasks> tasks = ObservableList.of([]);
+
+  @observable
   String nameTask = '';
 
   @observable
@@ -29,6 +32,9 @@ abstract class _RegistrationStore with Store {
 
   @observable
   bool loadingNewTask = false;
+
+  @observable
+  bool loadingTasks = false;
 
   @action
   void setTaskName(value) {
@@ -73,5 +79,12 @@ abstract class _RegistrationStore with Store {
     );
     await _taskService.insert(task);
     loadingNewTask = false;
-  } 
+  }
+
+  @action
+  Future<void> getTasks() async {
+    loadingTasks = true;
+    tasks = ObservableList.of(await _taskService.getAll());
+    loadingTasks = false;
+  }
 }
