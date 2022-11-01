@@ -2,6 +2,7 @@ import 'package:agenda/comum/consts.dart';
 import 'package:agenda/screens/new_task_screen/new_task_screen.dart';
 import 'package:agenda/stores/registration_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -12,6 +13,11 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final _registrationStore = RegistrationStore();
+  @override
+  void initState() {
+    _registrationStore.getTasks();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,10 +56,23 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
         child: Column(
           children: [
-            Text(
+            const Text(
               'Tarefas do dia'
             ),
-
+            Observer(builder: (_) {
+              if(_registrationStore.loadingTasks) {
+                return CircularProgressIndicator(
+                  color: colorAppBar,
+                );
+              } else {
+                return ListView.builder(
+                  itemCount: _registrationStore.tasks.length,
+                  itemBuilder: (context, index) {
+                    return Text(_registrationStore.tasks[index].nameTask!);
+                  }
+                );
+              }
+            }),
           ],
         ),
       ),
