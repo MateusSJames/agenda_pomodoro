@@ -1,4 +1,5 @@
 import 'package:agenda/comum/consts.dart';
+import 'package:agenda/factories/view/card_abstract.dart';
 import 'package:agenda/screens/new_task_screen/new_task_screen.dart';
 import 'package:agenda/stores/registration_store.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _registrationStore.getTasks();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,8 +44,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: (){},
-            tooltip: 'Visualizar calendário', 
+            onPressed: () {},
+            tooltip: 'Visualizar calendário',
             icon: const Icon(Icons.calendar_month),
           ),
         ],
@@ -56,20 +58,29 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
         child: Column(
           children: [
-            const Text(
-              'Tarefas do dia'
-            ),
+            const Text('Tarefas do dia'),
             Observer(builder: (_) {
-              if(_registrationStore.loadingTasks) {
+              if (_registrationStore.loadingTasks) {
                 return CircularProgressIndicator(
                   color: colorAppBar,
                 );
               } else {
-                return ListView.builder(
-                  itemCount: _registrationStore.tasks.length,
-                  itemBuilder: (context, index) {
-                    return Text(_registrationStore.tasks[index].nameTask!);
-                  }
+                return Expanded(
+                  child: ListView.builder(
+                      itemCount: _registrationStore.tasks.length,
+                      itemBuilder: (context, index) {
+                        return CardTaskAbstract(
+                          _registrationStore.tasks[index].nameTask!,
+                          _registrationStore.tasks[index].initHour,
+                          _registrationStore.tasks[index].endHour,
+                          _registrationStore.tasks[index],
+                          (value) {
+                            _registrationStore.deleteTask(
+                                _registrationStore.tasks[index].id!);
+                          },
+                        ).create(context);
+                        //return Text(_registrationStore.tasks[index].nameTask!);
+                      }),
                 );
               }
             }),

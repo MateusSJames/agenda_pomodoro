@@ -157,8 +157,8 @@ mixin _$RegistrationStore on _RegistrationStore, Store {
       AsyncAction('_RegistrationStore.insertTask', context: context);
 
   @override
-  Future<void> insertTask() {
-    return _$insertTaskAsyncAction.run(() => super.insertTask());
+  Future<void> insertTask(BuildContext context) {
+    return _$insertTaskAsyncAction.run(() => super.insertTask(context));
   }
 
   late final _$getTasksAsyncAction =
@@ -167,6 +167,14 @@ mixin _$RegistrationStore on _RegistrationStore, Store {
   @override
   Future<void> getTasks() {
     return _$getTasksAsyncAction.run(() => super.getTasks());
+  }
+
+  late final _$deleteTaskAsyncAction =
+      AsyncAction('_RegistrationStore.deleteTask', context: context);
+
+  @override
+  Future<void> deleteTask(int id) {
+    return _$deleteTaskAsyncAction.run(() => super.deleteTask(id));
   }
 
   late final _$_RegistrationStoreActionController =

@@ -3,6 +3,7 @@ import 'package:agenda/factories/view/button_abstract.dart';
 import 'package:agenda/factories/view/category_field.dart';
 import 'package:agenda/factories/view/registration_field.dart';
 import 'package:agenda/factories/view/slider_field.dart';
+import 'package:agenda/screens/home_screen/home_screen.dart';
 import 'package:agenda/stores/registration_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -37,6 +38,16 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         elevation: 0,
         centerTitle: true,
         backgroundColor: colorAppBar,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const HomeScreen(),
+              ),
+            );
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -46,12 +57,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           child: Column(
             children: [
               RegistrationField(
-                controller: _nameTaskController,
-                nameField: 'Nome da tarefa',
-                onChanged: (value) {
-                  _registrationStore.setTaskName(value);
-                }
-              ).create(),
+                  controller: _nameTaskController,
+                  nameField: 'Nome da tarefa',
+                  onChanged: (value) {
+                    _registrationStore.setTaskName(value);
+                  }).create(),
               RegistrationField(
                 nameField: 'Data',
                 controller: _dateController,
@@ -68,7 +78,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       controller: _initHourController,
                       onTap: () async {
                         await _selectHourTask(_initHourController, context);
-                        _registrationStore.setTaskInitHour(_initHourController.text);
+                        _registrationStore
+                            .setTaskInitHour(_initHourController.text);
                       },
                       enable: false,
                     ).create(),
@@ -83,7 +94,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                         enable: false,
                         onTap: () async {
                           await _selectHourTask(_endHourController, context);
-                          _registrationStore.setTaskEndHour(_endHourController.text);
+                          _registrationStore
+                              .setTaskEndHour(_endHourController.text);
                         }).create(),
                   ),
                 ],
@@ -112,7 +124,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     }).create();
               }),
               Observer(builder: (_) {
-                if(_registrationStore.loadingNewTask) {
+                if (_registrationStore.loadingNewTask) {
                   return CircularProgressIndicator(
                     color: colorAppBar,
                   );
@@ -121,7 +133,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     nameButton: 'Salvar',
                     color: colorAppBar,
                     onPressed: () {
-                      _registrationStore.insertTask();
+                      _registrationStore.insertTask(context);
                     },
                   ).create();
                 }

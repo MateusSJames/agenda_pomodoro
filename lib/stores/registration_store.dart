@@ -1,6 +1,10 @@
+import 'package:agenda/factories/view/alerts.dart';
 import 'package:agenda/models/tasks.dart';
 import 'package:agenda/services/task_service.dart';
+import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+
+import '../screens/home_screen/home_screen.dart';
 
 part 'registration_store.g.dart';
 
@@ -66,19 +70,34 @@ abstract class _RegistrationStore with Store {
     duration = value;
   }
 
-  @action 
-  Future<void> insertTask() async {
+  @action
+  Future<void> insertTask(BuildContext context) async {
     loadingNewTask = true;
     final task = Tasks(
-      nameTask: nameTask, 
-      dateTask: dateTask, 
-      initHour: initHourTask, 
-      endHour: endHourTask, 
-      sessions: session.round(), 
+      nameTask: nameTask,
+      dateTask: dateTask,
+      initHour: initHourTask,
+      endHour: endHourTask,
+      sessions: session.round(),
       durationSession: duration.round(),
     );
     await _taskService.insert(task);
     loadingNewTask = false;
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const HomeScreen(),
+      ),
+    );
+    nameTask = '';
+    dateTask = '';
+    initHourTask = '';
+
+    endHourTask = '';
+
+    session = 1;
+    duration = 1;
+    AlertAbstract('Tarefa cadastrada', 'A tarefa foi cadastrada com sucesso')
+        .create(context);
   }
 
   @action
@@ -86,5 +105,11 @@ abstract class _RegistrationStore with Store {
     loadingTasks = true;
     tasks = ObservableList.of(await _taskService.getAll());
     loadingTasks = false;
+  }
+
+  @action
+  Future<void> deleteTask(int id) async {
+    await _taskService.delete(id);
+    getTasks();
   }
 }
