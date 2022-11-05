@@ -3,5 +3,5 @@ abstract class ServicesHelper<TReturn, TParam> {
   Future<int> update(TParam param);
   Future<int> delete(int id);
   Future<List<TReturn>> getAll();
-  Future<TReturn?> getById(int id);
+  Future<List<TReturn>> getByValue(String id);
 }

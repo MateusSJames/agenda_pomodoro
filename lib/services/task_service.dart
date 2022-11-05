@@ -3,7 +3,7 @@ import 'package:agenda/helpers/services_helper.dart';
 import 'package:agenda/models/tasks.dart';
 import 'package:sqflite/sqflite.dart';
 
-class TaskService implements ServicesHelper<Tasks, Tasks> {
+class TaskService implements ServicesHelper<Tasks, Tasks>{
   final _databaseConnection = DatabaseConnection();
   @override
   Future<int> delete(int id) async {
@@ -28,18 +28,16 @@ class TaskService implements ServicesHelper<Tasks, Tasks> {
   }
 
   @override
-  Future<Tasks?> getById(int id) async {
+  Future<List<Tasks>> getByValue(value) async {
     Database _db = await _databaseConnection.database;
-    List<Map<String, dynamic>> values = await _db.query(
+    var result = await _db.query(
       _databaseConnection.taskTable,
-      where: '${_databaseConnection.idTask} = ?',
-      whereArgs: [id],
+      where: '${_databaseConnection.dateTask} = ?',
+      whereArgs: [value],
     );
-    if (values.isNotEmpty) {
-      return Tasks.fromJson(values.first);
-    } else {
-      return null;
-    }
+    List<Tasks> values =
+        result.isNotEmpty ? result.map((e) => Tasks.fromJson(e)).toList() : [];
+    return values;
   }
 
   @override

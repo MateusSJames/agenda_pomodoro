@@ -2,6 +2,7 @@ import 'package:agenda/factories/view/alerts.dart';
 import 'package:agenda/models/tasks.dart';
 import 'package:agenda/services/task_service.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:mobx/mobx.dart';
 
 import '../screens/home_screen/home_screen.dart';
@@ -98,6 +99,14 @@ abstract class _RegistrationStore with Store {
     duration = 1;
     AlertAbstract('Tarefa cadastrada', 'A tarefa foi cadastrada com sucesso')
         .create(context);
+  }
+
+  @action
+  Future<void> getTasksToday() async {
+    loadingTasks = true;
+    tasks = ObservableList.of(await _taskService
+        .getByValue(DateFormat('dd/MM/yyyy').format(DateTime.now())));
+    loadingTasks = false;
   }
 
   @action

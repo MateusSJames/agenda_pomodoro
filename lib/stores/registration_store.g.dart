@@ -161,6 +161,14 @@ mixin _$RegistrationStore on _RegistrationStore, Store {
     return _$insertTaskAsyncAction.run(() => super.insertTask(context));
   }
 
+  late final _$getTasksTodayAsyncAction =
+      AsyncAction('_RegistrationStore.getTasksToday', context: context);
+
+  @override
+  Future<void> getTasksToday() {
+    return _$getTasksTodayAsyncAction.run(() => super.getTasksToday());
+  }
+
   late final _$getTasksAsyncAction =
       AsyncAction('_RegistrationStore.getTasks', context: context);
 

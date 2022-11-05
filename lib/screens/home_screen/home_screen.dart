@@ -5,6 +5,8 @@ import 'package:agenda/stores/registration_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
+import '../calendar_screen/calendar_screen.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
@@ -16,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _registrationStore = RegistrationStore();
   @override
   void initState() {
-    _registrationStore.getTasks();
+    _registrationStore.getTasksToday();
     super.initState();
   }
 
@@ -44,7 +46,11 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const CalendarScreen()),
+              );
+            },
             tooltip: 'Visualizar calendário',
             icon: const Icon(Icons.calendar_month),
           ),
