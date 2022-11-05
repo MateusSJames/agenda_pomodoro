@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _registrationStore = RegistrationStore();
   @override
   void initState() {
-    _registrationStore.getTasks();
+    _registrationStore.getTasksToday();
     super.initState();
   }
 
@@ -47,8 +47,9 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           IconButton(
             onPressed: () {
-              Navigator.of(context).push(
+              Navigator.of(context).pushAndRemoveUntil(
                 MaterialPageRoute(builder: (context) => const CalendarScreen()),
+                (Route<dynamic> route) => false,
               );
             },
             tooltip: 'Visualizar calendário',
@@ -95,8 +96,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.of(context).push(
+          Navigator.of(context).pushAndRemoveUntil(
             MaterialPageRoute(builder: (context) => const NewTaskScreen()),
+            (Route<dynamic> route) => false,
           );
         },
         backgroundColor: colorAppBar,

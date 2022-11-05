@@ -5,6 +5,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 import '../../comum/consts.dart';
+import '../home_screen/home_screen.dart';
 
 class CalendarScreen extends StatefulWidget {
   const CalendarScreen({Key? key}) : super(key: key);
@@ -34,6 +35,17 @@ class _CalendarScreenState extends State<CalendarScreen> {
         elevation: 0,
         centerTitle: true,
         backgroundColor: colorAppBar,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => const HomeScreen(),
+              ),
+              (Route<dynamic> route) => false,
+            );
+          },
+          icon: const Icon(Icons.arrow_back),
+        ),
       ),
       body: Observer(
         builder: (_) {
@@ -44,7 +56,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
             cellBorderColor: colorAppBar,
             todayHighlightColor: colorAppBar,
             initialSelectedDate: DateTime.now(),
-            
           );
         },
       ),

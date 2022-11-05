@@ -84,10 +84,11 @@ abstract class _RegistrationStore with Store {
     );
     await _taskService.insert(task);
     loadingNewTask = false;
-    Navigator.of(context).push(
+    Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
         builder: (context) => const HomeScreen(),
       ),
+      (Route<dynamic> route) => false,
     );
     nameTask = '';
     dateTask = '';

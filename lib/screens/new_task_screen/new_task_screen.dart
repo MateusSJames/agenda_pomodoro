@@ -40,10 +40,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         backgroundColor: colorAppBar,
         leading: IconButton(
           onPressed: () {
-            Navigator.of(context).push(
+            Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (context) => const HomeScreen(),
               ),
+              (Route<dynamic> route) => false,
             );
           },
           icon: const Icon(Icons.arrow_back),
