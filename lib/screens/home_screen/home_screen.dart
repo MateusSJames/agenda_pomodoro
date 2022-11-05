@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final _registrationStore = RegistrationStore();
   @override
   void initState() {
-    _registrationStore.getTasksToday();
+    _registrationStore.getTasks();
     super.initState();
   }
 
