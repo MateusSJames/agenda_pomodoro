@@ -1,13 +1,17 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 
 class ButtonAbstract {
   String nameButton;
   VoidCallback? onPressed;
   Color? color;
+  Color? colorText;
 
   ButtonAbstract({
     required this.nameButton,
     required this.color,
+    required this.colorText,
     required this.onPressed,
   });
 
@@ -18,7 +22,12 @@ class ButtonAbstract {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(primary: color),
         onPressed: onPressed,
-        child: Text(nameButton),
+        child: Text(
+          nameButton,
+          style: TextStyle(
+            color: colorText,
+          ),
+        ),
       ),
     );
   }

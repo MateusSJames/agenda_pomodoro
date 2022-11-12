@@ -1,6 +1,6 @@
 import 'package:agenda/comum/consts.dart';
 import 'package:agenda/factories/view/button_abstract.dart';
-import 'package:agenda/factories/view/category_field.dart';
+// import 'package:agenda/factories/view/category_field.dart';
 import 'package:agenda/factories/view/registration_field.dart';
 import 'package:agenda/factories/view/slider_field.dart';
 import 'package:agenda/screens/home_screen/home_screen.dart';
@@ -133,6 +133,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                   return ButtonAbstract(
                     nameButton: 'Salvar',
                     color: colorAppBar,
+                    colorText: Colors.white,
                     onPressed: () {
                       _registrationStore.insertTask(context);
                     },

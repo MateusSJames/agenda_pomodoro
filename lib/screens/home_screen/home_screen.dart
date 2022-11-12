@@ -1,6 +1,7 @@
 import 'package:agenda/comum/consts.dart';
 import 'package:agenda/factories/view/card_abstract.dart';
 import 'package:agenda/screens/new_task_screen/new_task_screen.dart';
+import 'package:agenda/screens/stopwatch_screen.dart/stopwatch_screen.dart';
 import 'package:agenda/stores/registration_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -108,16 +109,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListView.builder(
                         itemCount: _registrationStore.tasks.length,
                         itemBuilder: (context, index) {
-                          return CardTaskAbstract(
-                            _registrationStore.tasks[index].nameTask!,
-                            _registrationStore.tasks[index].initHour,
-                            _registrationStore.tasks[index].endHour,
-                            _registrationStore.tasks[index],
-                            (value) {
-                              _registrationStore.deleteTask(
-                                  _registrationStore.tasks[index].id!);
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                  builder: (context) => const StopWatchScreen(),
+                                ),
+                                (Route<dynamic> route) => false,
+                              );
                             },
-                          ).create(context);
+                            child: CardTaskAbstract(
+                              _registrationStore.tasks[index].nameTask!,
+                              _registrationStore.tasks[index].initHour,
+                              _registrationStore.tasks[index].endHour,
+                              _registrationStore.tasks[index],
+                              (value) {
+                                _registrationStore.deleteTask(
+                                    _registrationStore.tasks[index].id!);
+                              },
+                            ).create(context),
+                          );
                           //return Text(_registrationStore.tasks[index].nameTask!);
                         }),
                   );
