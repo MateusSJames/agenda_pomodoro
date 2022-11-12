@@ -116,7 +116,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
               Observer(builder: (_) {
                 return SliderField(
                     min: 1,
-                    max: 40,
+                    max: 120,
                     divisions: 5,
                     nameField: 'Duração de sessões',
                     valueStore: _registrationStore.duration,

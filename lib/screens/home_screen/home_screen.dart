@@ -65,30 +65,63 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
         child: Column(
           children: [
-            const Text('Tarefas do dia'),
             Observer(builder: (_) {
               if (_registrationStore.loadingTasks) {
                 return CircularProgressIndicator(
                   color: colorAppBar,
                 );
               } else {
-                return Expanded(
-                  child: ListView.builder(
-                      itemCount: _registrationStore.tasks.length,
-                      itemBuilder: (context, index) {
-                        return CardTaskAbstract(
-                          _registrationStore.tasks[index].nameTask!,
-                          _registrationStore.tasks[index].initHour,
-                          _registrationStore.tasks[index].endHour,
-                          _registrationStore.tasks[index],
-                          (value) {
-                            _registrationStore.deleteTask(
-                                _registrationStore.tasks[index].id!);
-                          },
-                        ).create(context);
-                        //return Text(_registrationStore.tasks[index].nameTask!);
-                      }),
-                );
+                if (_registrationStore.tasks.isEmpty) {
+                  return Column(
+                    children: [
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.1,
+                      ),
+                      Icon(
+                        Icons.fact_check,
+                        color: Colors.grey[300],
+                        size: MediaQuery.of(context).size.height * 0.25,
+                      ),
+                      const Text(
+                        'Você não tem nenhuma tarefa \npara hoje',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        'Uau, você não tem nenhuma tarefa prevista para hoje, mas você pode cadastrar novas agora mesmo.',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 17.0,
+                          color: Colors.grey[500],
+                        ),
+                      ),
+                    ],
+                  );
+                } else {
+                  return Expanded(
+                    child: ListView.builder(
+                        itemCount: _registrationStore.tasks.length,
+                        itemBuilder: (context, index) {
+                          return CardTaskAbstract(
+                            _registrationStore.tasks[index].nameTask!,
+                            _registrationStore.tasks[index].initHour,
+                            _registrationStore.tasks[index].endHour,
+                            _registrationStore.tasks[index],
+                            (value) {
+                              _registrationStore.deleteTask(
+                                  _registrationStore.tasks[index].id!);
+                            },
+                          ).create(context);
+                          //return Text(_registrationStore.tasks[index].nameTask!);
+                        }),
+                  );
+                }
               }
             }),
           ],
