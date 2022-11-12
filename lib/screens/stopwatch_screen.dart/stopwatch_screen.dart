@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:agenda/factories/view/button_abstract.dart';
 import 'package:agenda/factories/view/duration_abstract.dart';
 import 'package:agenda/stores/stopwatch_store.dart';
@@ -19,7 +17,7 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(238, 190, 147, 247),
+      backgroundColor: const Color.fromARGB(238, 190, 147, 247),
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,

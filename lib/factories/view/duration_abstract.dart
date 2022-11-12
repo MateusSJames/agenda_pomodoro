@@ -13,7 +13,7 @@ class DurationCountDown {
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(
-        '$time',
+        time,
         style: const TextStyle(
           fontSize: 72.0,
           fontWeight: FontWeight.bold,

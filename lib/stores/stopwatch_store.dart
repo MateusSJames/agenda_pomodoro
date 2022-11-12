@@ -55,6 +55,7 @@ abstract class _StopWatchStore with Store {
   void stopTime({bool resets = true}) {
     if (resets) {
       reset();
+      isRunning = false;
     }
     timer?.cancel();
   }
