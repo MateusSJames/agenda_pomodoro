@@ -1,4 +1,4 @@
-abstract class ServicesHelper<TReturn, TParam> {
+abstract class ServicesRepository<TReturn, TParam> {
   Future<int> insert(TParam param);
   Future<int> update(TParam param);
   Future<int> delete(int id);

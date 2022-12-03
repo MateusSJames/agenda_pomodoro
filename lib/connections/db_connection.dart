@@ -1,13 +1,14 @@
 import 'dart:io';
 
+import 'package:agenda/connections/database_connection.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 
-class DatabaseConnection {
-  static DatabaseConnection? _databaseConnection;
+class SqfliteConnection implements IDbConnection<Database, Database>{
+  static SqfliteConnection? _databaseConnection;
   static Database? _database;
 
-  DatabaseConnection._createInstance();
+  SqfliteConnection._createInstance();
 
   String taskTable = 'task';
   String idTask = 'id';
@@ -18,10 +19,10 @@ class DatabaseConnection {
   String sessionsTask = 'sessions';
   String durationTask = 'duration';
 
-  factory DatabaseConnection() {
+  factory SqfliteConnection() {
     // ignore: prefer_conditional_assignment
     if (_databaseConnection == null) {
-      _databaseConnection = DatabaseConnection._createInstance();
+      _databaseConnection = SqfliteConnection._createInstance();
     }
     return _databaseConnection!;
   }
@@ -34,17 +35,19 @@ class DatabaseConnection {
     return _database!;
   }
 
+  @override
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
     String path = directory.path + 'agenda.db';
 
     var agendaDatabase =
-        await openDatabase(path, version: 1, onCreate: _createDb);
+        await openDatabase(path, version: 1, onCreate: createDb);
 
     return agendaDatabase;
   }
 
-  Future<void> _createDb(Database database, int version) async {
+  @override
+  Future<void> createDb(Database database, int version) async {
     await database.execute('''
         CREATE TABLE $taskTable(
           $idTask INTEGER PRIMARY KEY AUTOINCREMENT,

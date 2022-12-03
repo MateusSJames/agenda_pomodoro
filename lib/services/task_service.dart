@@ -1,10 +1,10 @@
 import 'package:agenda/connections/db_connection.dart';
-import 'package:agenda/helpers/services_helper.dart';
 import 'package:agenda/models/tasks.dart';
+import 'package:agenda/repository/services_repository.dart';
 import 'package:sqflite/sqflite.dart';
 
-class TaskService implements ServicesHelper<Tasks, Tasks>{
-  final _databaseConnection = DatabaseConnection();
+class TaskService implements ServicesRepository<Tasks, Tasks>{
+  final _databaseConnection = SqfliteConnection();
   @override
   Future<int> delete(int id) async {
     Database _db = await _databaseConnection.database;
