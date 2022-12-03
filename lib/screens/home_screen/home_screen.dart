@@ -1,4 +1,4 @@
-import 'package:agenda/comum/consts.dart';
+import 'package:agenda/comum/styles/consts.dart';
 import 'package:agenda/factories/view/card_abstract.dart';
 import 'package:agenda/screens/new_task_screen/new_task_screen.dart';
 import 'package:agenda/screens/stopwatch_screen.dart/stopwatch_screen.dart';
@@ -113,7 +113,9 @@ class _HomeScreenState extends State<HomeScreen> {
                             onTap: () {
                               Navigator.of(context).pushAndRemoveUntil(
                                 MaterialPageRoute(
-                                  builder: (context) => const StopWatchScreen(),
+                                  builder: (context) => StopWatchScreen(
+                                    task: _registrationStore.tasks[index],
+                                  ),
                                 ),
                                 (Route<dynamic> route) => false,
                               );

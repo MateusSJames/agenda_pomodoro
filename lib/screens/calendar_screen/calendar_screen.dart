@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import '../../comum/consts.dart';
+import '../../comum/styles/consts.dart';
 import '../home_screen/home_screen.dart';
 
 class CalendarScreen extends StatefulWidget {
@@ -54,6 +54,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
             dataSource:
                 TaskSource([]).getCalendarDataSource(_registrationStore.tasks),
             cellBorderColor: colorAppBar,
+            onTap: (calendarTapDetails) {
+              print('AQUI');
+            },
             todayHighlightColor: colorAppBar,
             initialSelectedDate: DateTime.now(),
           );

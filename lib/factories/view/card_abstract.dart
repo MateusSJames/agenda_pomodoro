@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../comum/consts.dart';
+import '../../comum/styles/consts.dart';
 
 class CardTaskAbstract {
   String? name;

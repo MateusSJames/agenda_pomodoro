@@ -1,4 +1,4 @@
-import 'package:agenda/comum/consts.dart';
+import 'package:agenda/comum/styles/consts.dart';
 import 'package:agenda/factories/view/registration_abstract.dart';
 import 'package:flutter/material.dart';
 

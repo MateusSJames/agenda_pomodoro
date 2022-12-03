@@ -69,6 +69,22 @@ mixin _$StopWatchStore on _StopWatchStore, Store {
     });
   }
 
+  late final _$sessionsAtom =
+      Atom(name: '_StopWatchStore.sessions', context: context);
+
+  @override
+  int get sessions {
+    _$sessionsAtom.reportRead();
+    return super.sessions;
+  }
+
+  @override
+  set sessions(int value) {
+    _$sessionsAtom.reportWrite(value, super.sessions, () {
+      super.sessions = value;
+    });
+  }
+
   late final _$durationAtom =
       Atom(name: '_StopWatchStore.duration', context: context);
 
@@ -89,6 +105,28 @@ mixin _$StopWatchStore on _StopWatchStore, Store {
       ActionController(name: '_StopWatchStore', context: context);
 
   @override
+  void setDuration(dynamic value) {
+    final _$actionInfo = _$_StopWatchStoreActionController.startAction(
+        name: '_StopWatchStore.setDuration');
+    try {
+      return super.setDuration(value);
+    } finally {
+      _$_StopWatchStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setSessions(dynamic value) {
+    final _$actionInfo = _$_StopWatchStoreActionController.startAction(
+        name: '_StopWatchStore.setSessions');
+    try {
+      return super.setSessions(value);
+    } finally {
+      _$_StopWatchStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   void addTime() {
     final _$actionInfo = _$_StopWatchStoreActionController.startAction(
         name: '_StopWatchStore.addTime');
@@ -100,22 +138,22 @@ mixin _$StopWatchStore on _StopWatchStore, Store {
   }
 
   @override
-  void startTime({bool resets = true}) {
+  void startTime({bool resets = true, int? value}) {
     final _$actionInfo = _$_StopWatchStoreActionController.startAction(
         name: '_StopWatchStore.startTime');
     try {
-      return super.startTime(resets: resets);
+      return super.startTime(resets: resets, value: value);
     } finally {
       _$_StopWatchStoreActionController.endAction(_$actionInfo);
     }
   }
 
   @override
-  void reset() {
+  void reset(int value) {
     final _$actionInfo = _$_StopWatchStoreActionController.startAction(
         name: '_StopWatchStore.reset');
     try {
-      return super.reset();
+      return super.reset(value);
     } finally {
       _$_StopWatchStoreActionController.endAction(_$actionInfo);
     }
@@ -133,11 +171,11 @@ mixin _$StopWatchStore on _StopWatchStore, Store {
   }
 
   @override
-  void stopTime({bool resets = true}) {
+  void stopTime({bool resets = true, int? value}) {
     final _$actionInfo = _$_StopWatchStoreActionController.startAction(
         name: '_StopWatchStore.stopTime');
     try {
-      return super.stopTime(resets: resets);
+      return super.stopTime(resets: resets, value: value);
     } finally {
       _$_StopWatchStoreActionController.endAction(_$actionInfo);
     }
@@ -159,6 +197,7 @@ mixin _$StopWatchStore on _StopWatchStore, Store {
     return '''
 isRunning: ${isRunning},
 isBreak: ${isBreak},
+sessions: ${sessions},
 duration: ${duration},
 hours: ${hours},
 minutes: ${minutes},

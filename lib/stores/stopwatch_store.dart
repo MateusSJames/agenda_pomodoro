@@ -16,12 +16,29 @@ abstract class _StopWatchStore with Store {
   bool isBreak = false;
 
   @observable
-  Duration duration = const Duration(minutes: 10);
+  int sessions = 0;
+
+  @observable
+  Duration duration = const Duration();
+
+  @action
+  void setDuration(value) {
+    duration = Duration(minutes: value);
+  }
+
+  @action
+  void setSessions(value) {
+    sessions = value;
+  }
 
   @action
   void addTime() {
     const addSeconds = -1;
     final seconds = addSeconds + duration.inSeconds;
+    if (seconds == 0) {
+      stopTime(value: duration.inMinutes);
+      setSessions(sessions - 1);
+    }
     if (seconds < 0) {
       timer!.cancel();
     } else {
@@ -30,9 +47,9 @@ abstract class _StopWatchStore with Store {
   }
 
   @action
-  void startTime({bool resets = true}) {
+  void startTime({bool resets = true, int? value}) {
     if (resets) {
-      reset();
+      reset(value!);
     }
     timer = Timer.periodic(
       const Duration(seconds: 1),
@@ -42,8 +59,8 @@ abstract class _StopWatchStore with Store {
   }
 
   @action
-  void reset() {
-    duration = const Duration(minutes: 10);
+  void reset(int value) {
+    duration = Duration(minutes: value);
   }
 
   @action
@@ -52,9 +69,9 @@ abstract class _StopWatchStore with Store {
   }
 
   @action
-  void stopTime({bool resets = true}) {
+  void stopTime({bool resets = true, int? value}) {
     if (resets) {
-      reset();
+      reset(value!);
       isRunning = false;
     }
     timer?.cancel();

@@ -1,11 +1,19 @@
+import 'package:agenda/comum/styles/consts.dart';
+import 'package:agenda/factories/view/alerts.dart';
 import 'package:agenda/factories/view/button_abstract.dart';
 import 'package:agenda/factories/view/duration_abstract.dart';
+import 'package:agenda/models/tasks.dart';
+import 'package:agenda/screens/home_screen/home_screen.dart';
 import 'package:agenda/stores/stopwatch_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 class StopWatchScreen extends StatefulWidget {
-  const StopWatchScreen({Key? key}) : super(key: key);
+  final Tasks task;
+  const StopWatchScreen({
+    Key? key,
+    required this.task,
+  }) : super(key: key);
 
   @override
   State<StopWatchScreen> createState() => _StopWatchScreenState();
@@ -15,9 +23,35 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
   final _stopWatchStore = StopWatchStore();
 
   @override
+  void initState() {
+    // widget.task.durationSession
+    _stopWatchStore.setDuration(1);
+    _stopWatchStore.setSessions(widget.task.sessions);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(238, 190, 147, 247),
+      appBar: AppBar(
+        elevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (context) => const HomeScreen(),
+              ),
+              (Route<dynamic> route) => false,
+            );
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: backgroundColorStopWatchScreen,
+      ),
+      backgroundColor: backgroundColorStopWatchScreen,
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -25,6 +59,19 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Observer(builder: (_) {
+                return Text(
+                  'Sessões ativas: ${_stopWatchStore.sessions}',
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                );
+              }),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.2,
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -83,7 +130,7 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
                             color: Colors.white,
                             colorText: Colors.black,
                             onPressed: () {
-                              _stopWatchStore.stopTime();
+                              _stopWatchStore.stopTime(value: 1);
                             },
                           ).create(),
                         ),
@@ -99,7 +146,13 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
                       color: Colors.white,
                       colorText: Colors.black,
                       onPressed: () {
-                        _stopWatchStore.startTime();
+                        if (_stopWatchStore.sessions == 0) {
+                          AlertAbstract('Tarefa finalizada',
+                                  'Todas as sessões dessa tarefa foram concluídas com sucesso')
+                              .create(context);
+                        } else {
+                          _stopWatchStore.startTime(value: 1);
+                        }
                       },
                     ).create(),
                   );
