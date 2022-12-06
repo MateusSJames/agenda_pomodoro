@@ -4,6 +4,7 @@ import 'package:agenda/factories/view/button_abstract.dart';
 import 'package:agenda/factories/view/duration_abstract.dart';
 import 'package:agenda/models/tasks.dart';
 import 'package:agenda/screens/home_screen/home_screen.dart';
+import 'package:agenda/services/task_service.dart';
 import 'package:agenda/stores/stopwatch_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -21,6 +22,7 @@ class StopWatchScreen extends StatefulWidget {
 
 class _StopWatchScreenState extends State<StopWatchScreen> {
   final _stopWatchStore = StopWatchStore();
+  final _taskService = TaskService();
 
   @override
   void initState() {
@@ -37,6 +39,20 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
         elevation: 0,
         leading: IconButton(
           onPressed: () {
+            if(_stopWatchStore.sessions > 0) {
+              final task = Tasks(
+                id: widget.task.id,
+                nameTask: widget.task.nameTask, 
+                dateTask: widget.task.dateTask, 
+                initHour: widget.task.initHour, 
+                endHour: widget.task.endHour, 
+                sessions: _stopWatchStore.sessions, 
+                durationSession: widget.task.durationSession,
+              );
+              _taskService.update(task);
+            } else {
+              _taskService.delete(widget.task.id!);
+            }
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (context) => const HomeScreen(),

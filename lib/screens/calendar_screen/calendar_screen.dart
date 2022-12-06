@@ -54,9 +54,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
             dataSource:
                 TaskSource([]).getCalendarDataSource(_registrationStore.tasks),
             cellBorderColor: colorAppBar,
-            onTap: (calendarTapDetails) {
-              print('AQUI');
-            },
             todayHighlightColor: colorAppBar,
             initialSelectedDate: DateTime.now(),
           );
