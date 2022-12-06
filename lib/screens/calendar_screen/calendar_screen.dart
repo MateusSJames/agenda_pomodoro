@@ -21,9 +21,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
   @override
   void initState() {
     _registrationStore.getTasks();
-    // TaskSource([]).getCalendarDataSource().then((value) {
-    //   print(value);
-    // });
     super.initState();
   }
 
