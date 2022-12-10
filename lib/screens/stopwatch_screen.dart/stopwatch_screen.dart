@@ -1,4 +1,5 @@
 import 'package:agenda/comum/styles/consts.dart';
+import 'package:agenda/connections/db_connection.dart';
 import 'package:agenda/factories/view/alerts.dart';
 import 'package:agenda/factories/view/button_abstract.dart';
 import 'package:agenda/factories/view/duration_abstract.dart';
@@ -22,7 +23,7 @@ class StopWatchScreen extends StatefulWidget {
 
 class _StopWatchScreenState extends State<StopWatchScreen> {
   final _stopWatchStore = StopWatchStore();
-  final _taskService = TaskService();
+  final _taskService = TaskService(SqfliteConnection());
 
   @override
   void initState() {
@@ -49,9 +50,9 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
                 sessions: _stopWatchStore.sessions, 
                 durationSession: widget.task.durationSession,
               );
-              _taskService.update(task);
+              _taskService.update(task, SqfliteConnection().idTask);
             } else {
-              _taskService.delete(widget.task.id!);
+              _taskService.delete(widget.task.id!, SqfliteConnection().idTask);
             }
             Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(

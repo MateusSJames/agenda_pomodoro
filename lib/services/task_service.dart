@@ -1,16 +1,17 @@
-import 'package:agenda/connections/db_connection.dart';
+import 'package:agenda/connections/database_connection.dart';
 import 'package:agenda/models/tasks.dart';
 import 'package:agenda/repository/services_repository.dart';
-import 'package:sqflite/sqflite.dart';
 
-class TaskService implements ServicesRepository<Tasks, Tasks>{
-  final _databaseConnection = SqfliteConnection();
+class TaskService implements ServicesRepository<Tasks, Tasks> {
+  final IDbConnection iConnection;
+  TaskService(
+    this.iConnection,
+  );
   @override
-  Future<int> delete(int id) async {
-    Database _db = await _databaseConnection.database;
-    var result = await _db.delete(
-      _databaseConnection.taskTable,
-      where: '${_databaseConnection.idTask} = ?',
+  Future<int> delete(int id, String where) async {
+    var result = await iConnection.delete(
+      iConnection.getNameTable()!,
+      where: '$where = ?',
       whereArgs: [id],
     );
     return result;
@@ -18,9 +19,8 @@ class TaskService implements ServicesRepository<Tasks, Tasks>{
 
   @override
   Future<List<Tasks>> getAll() async {
-    Database _db = await _databaseConnection.database;
-    var result = await _db.query(
-      _databaseConnection.taskTable,
+    var result = await iConnection.query(
+      iConnection.getNameTable()!,
     );
     List<Tasks> tasks =
         result.isNotEmpty ? result.map((e) => Tasks.fromJson(e)).toList() : [];
@@ -28,11 +28,10 @@ class TaskService implements ServicesRepository<Tasks, Tasks>{
   }
 
   @override
-  Future<List<Tasks>> getByValue(value) async {
-    Database _db = await _databaseConnection.database;
-    var result = await _db.query(
-      _databaseConnection.taskTable,
-      where: '${_databaseConnection.dateTask} = ?',
+  Future<List<Tasks>> getByValue(value, String whereArg) async {
+    var result = await iConnection.query(
+      iConnection.getNameTable()!,
+      where: '$whereArg = ?',
       whereArgs: [value],
     );
     List<Tasks> values =
@@ -42,21 +41,19 @@ class TaskService implements ServicesRepository<Tasks, Tasks>{
 
   @override
   Future<int> insert(Tasks task) async {
-    Database _db = await _databaseConnection.database;
-    var result = await _db.insert(
-      _databaseConnection.taskTable,
+    var result = await iConnection.insert(
+      iConnection.getNameTable()!,
       task.toJson(),
     );
     return result;
   }
 
   @override
-  Future<int> update(Tasks task) async {
-    Database _db = await _databaseConnection.database;
-    var result = await _db.update(
-      _databaseConnection.taskTable,
+  Future<int> update(Tasks task, String where) async {
+    var result = await iConnection.update(
+      iConnection.getNameTable()!,
       task.toJson(),
-      where: '${_databaseConnection.idTask} = ?',
+      where: '$where = ?',
       whereArgs: [task.id],
     );
     return result;

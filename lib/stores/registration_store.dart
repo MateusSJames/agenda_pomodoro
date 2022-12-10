@@ -1,3 +1,4 @@
+import 'package:agenda/connections/db_connection.dart';
 import 'package:agenda/factories/view/alerts.dart';
 import 'package:agenda/models/tasks.dart';
 import 'package:agenda/services/task_service.dart';
@@ -12,7 +13,7 @@ part 'registration_store.g.dart';
 class RegistrationStore = _RegistrationStore with _$RegistrationStore;
 
 abstract class _RegistrationStore with Store {
-  final _taskService = TaskService();
+  final _taskService = TaskService(SqfliteConnection());
 
   @observable
   ObservableList<Tasks> tasks = ObservableList.of([]);
@@ -105,8 +106,9 @@ abstract class _RegistrationStore with Store {
   @action
   Future<void> getTasksToday() async {
     loadingTasks = true;
-    tasks = ObservableList.of(await _taskService
-        .getByValue(DateFormat('dd/MM/yyyy').format(DateTime.now())));
+    tasks = ObservableList.of(await _taskService.getByValue(
+        DateFormat('dd/MM/yyyy').format(DateTime.now()),
+        SqfliteConnection().dateTask));
     loadingTasks = false;
   }
 
@@ -119,7 +121,7 @@ abstract class _RegistrationStore with Store {
 
   @action
   Future<void> deleteTask(int id) async {
-    await _taskService.delete(id);
+    await _taskService.delete(id, SqfliteConnection().idTask);
     getTasks();
   }
 }
