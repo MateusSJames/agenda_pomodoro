@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import '../../comum/styles/consts.dart';
 
@@ -7,7 +8,7 @@ class CardTaskAbstract {
   String? initHour;
   String? endHour;
   Object? value;
-  void Function(DismissDirection)? onDismissed;
+  void Function()? onDismissed;
 
   CardTaskAbstract(
     this.name,
@@ -23,66 +24,54 @@ class CardTaskAbstract {
         vertical: 8.0,
         horizontal: 5.0,
       ),
-      child: Dismissible(
-        key: ObjectKey(value),
-        onDismissed: onDismissed,
-        background: Container(
-          alignment: Alignment.centerRight,
-          color: Colors.red,
-          child: const Icon(
-            Icons.delete_forever,
-            color: Colors.white,
-            size: 30,
-          ),
-        ),
-        child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height * 0.12,
-          child: Card(
-            color: colorAppBar,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 15.0,
-                //vertical: 10.0,
-              ),
-              child: Row(
-                children: [
-                  const Icon(
-                    Icons.schedule,
-                    color: Colors.white,
+      child: SizedBox(
+        width: 100.w,
+        height: 20.h,
+        child: Card(
+          color: colorAppBar,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: 15.0,
+              //vertical: 10.0,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Icon(
+                  Icons.schedule,
+                  color: Colors.white,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 20.0,
+                    vertical: 2.vmax,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 20.0,
-                      vertical: 12.0,
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          name!,
-                          style: const TextStyle(
-                            fontSize: 17.0,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white,
-                          ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        name!,
+                        style: const TextStyle(
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
                         ),
-                        const SizedBox(
-                          height: 5,
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        '$initHour - $endHour',
+                        style: const TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.white,
                         ),
-                        Text(
-                          '$initHour - $endHour',
-                          style: const TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),

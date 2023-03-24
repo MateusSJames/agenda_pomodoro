@@ -23,6 +23,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   final _dateController = TextEditingController();
   final _initHourController = TextEditingController();
   final _endHourController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     _dateController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
@@ -51,96 +52,125 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
-          child: Column(
-            children: [
-              RegistrationField(
-                  controller: _nameTaskController,
-                  nameField: 'Nome da tarefa',
-                  onChanged: (value) {
-                    _registrationStore.setTaskName(value);
-                  }).create(),
-              RegistrationField(
-                nameField: 'Data',
-                controller: _dateController,
-                onTap: () async {
-                  await _selectDateTask(_dateController, context);
-                },
-                enable: false,
-              ).create(),
-              Row(
-                children: [
-                  Expanded(
-                    child: RegistrationField(
-                      nameField: 'Horário de início',
-                      controller: _initHourController,
-                      onTap: () async {
-                        await _selectHourTask(_initHourController, context);
-                        _registrationStore
-                            .setTaskInitHour(_initHourController.text);
-                      },
-                      enable: false,
-                    ).create(),
-                  ),
-                  const SizedBox(
-                    width: 30,
-                  ),
-                  Expanded(
-                    child: RegistrationField(
-                        nameField: 'Horário de término',
-                        controller: _endHourController,
-                        enable: false,
-                        onTap: () async {
-                          await _selectHourTask(_endHourController, context);
-                          _registrationStore
-                              .setTaskEndHour(_endHourController.text);
-                        }).create(),
-                  ),
-                ],
-              ),
-              //CategoryField(nameField: 'Categoria').create(),
-              Observer(builder: (_) {
-                return SliderField(
-                    min: 1,
-                    max: 10,
-                    divisions: 3,
-                    nameField: 'Sessões de trabalho',
-                    valueStore: _registrationStore.session,
-                    onChanged: (value) {
-                      _registrationStore.setSessions(value);
-                    }).create();
-              }),
-              Observer(builder: (_) {
-                return SliderField(
-                    min: 1,
-                    max: 120,
-                    divisions: 5,
-                    nameField: 'Duração de sessões',
-                    valueStore: _registrationStore.duration,
-                    onChanged: (value) {
-                      _registrationStore.setDuration(value);
-                    }).create();
-              }),
-              Observer(builder: (_) {
-                if (_registrationStore.loadingNewTask) {
-                  return CircularProgressIndicator(
-                    color: colorAppBar,
-                  );
-                } else {
-                  return ButtonAbstract(
-                    nameButton: 'Salvar',
-                    color: colorAppBar,
-                    colorText: Colors.white,
-                    onPressed: () {
-                      _registrationStore.insertTask(context);
+        child: Form(
+          key: _formKey,
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+            child: Column(
+              children: [
+                RegistrationField(
+                    controller: _nameTaskController,
+                    nameField: 'Nome da tarefa',
+                    validator: (value) {
+                      if(value!.isEmpty) {
+                        return 'Informe o nome da tarefa';
+                      }
+                      return null;
                     },
-                  ).create();
-                }
-              }),
-            ],
+                    onChanged: (value) {
+                      _registrationStore.setTaskName(value);
+                    }).create(),
+                RegistrationField(
+                  nameField: 'Data',
+                  controller: _dateController,
+                  onTap: () async {
+                    await _selectDateTask(_dateController, context);
+                  },
+                  validator: (value) {
+                    if(value!.isEmpty) {
+                        return 'Informe a data da tarefa';
+                    }
+                    return null;
+                  },
+                  enable: false,
+                ).create(),
+                Row(
+                  children: [
+                    Expanded(
+                      child: RegistrationField(
+                        nameField: 'Horário de início',
+                        controller: _initHourController,
+                        onTap: () async {
+                          await _selectHourTask(_initHourController, context);
+                          _registrationStore
+                              .setTaskInitHour(_initHourController.text);
+                        },
+                        validator: (value) {
+                          if(value!.isEmpty) {
+                            return 'Informe o horário de início';
+                          }
+                          return null;
+                        },
+                        enable: false,
+                      ).create(),
+                    ),
+                    const SizedBox(
+                      width: 30,
+                    ),
+                    Expanded(
+                      child: RegistrationField(
+                          nameField: 'Horário de término',
+                          controller: _endHourController,
+                          enable: false,
+                          validator: (value) {
+                            if(value!.isEmpty) {
+                              return 'Informe o horário de término';
+                            }
+                            return null;
+                          },
+                          onTap: () async {
+                            await _selectHourTask(_endHourController, context);
+                            _registrationStore
+                                .setTaskEndHour(_endHourController.text);
+                          }).create(),
+                    ),
+                  ],
+                ),
+                //CategoryField(nameField: 'Categoria').create(),
+                Observer(builder: (_) {
+                  return SliderField(
+                      min: 1,
+                      max: 10,
+                      divisions: 3,
+                      nameField: 'Sessões de trabalho',
+                      valueStore: _registrationStore.session,
+                      onChanged: (value) {
+                        _registrationStore.setSessions(value);
+                      }).create();
+                }),
+                Observer(builder: (_) {
+                  return SliderField(
+                      min: 1,
+                      max: 120,
+                      divisions: 5,
+                      nameField: 'Duração de sessões',
+                      valueStore: _registrationStore.duration,
+                      onChanged: (value) {
+                        _registrationStore.setDuration(value);
+                      }).create();
+                }),
+                Observer(builder: (_) {
+                  if (_registrationStore.loadingNewTask) {
+                    return CircularProgressIndicator(
+                      color: colorAppBar,
+                    );
+                  } else {
+                    return ButtonAbstract(
+                      nameButton: 'Salvar',
+                      color: colorAppBar,
+                      colorText: Colors.white,
+                      onPressed: () {
+                        if(_formKey.currentState!.validate()) {
+                          _registrationStore.insertTask(context);
+                        }
+                      },
+                    ).create();
+                  }
+                }),
+              ],
+            ),
           ),
         ),
       ),

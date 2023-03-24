@@ -9,6 +9,8 @@ import 'package:agenda/services/task_service.dart';
 import 'package:agenda/stores/stopwatch_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class StopWatchScreen extends StatefulWidget {
   final Tasks task;
@@ -38,6 +40,82 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
+        actions: [
+          IconButton(
+            onPressed: (){
+              showDialog(
+                context: context, 
+                builder: (context) {
+                  return SimpleDialog(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.all(2.vmax),
+                        child: Column(
+                          children: [
+                            Text(
+                              'Tem certeza de que gostaria de excluir essa tarefa ?',
+                              style: GoogleFonts.getFont(
+                                'Montserrat',
+                                textStyle: TextStyle(
+                                fontSize: 2.vmax,
+                                color: const Color(0xff000000),
+                                ),
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                            SizedBox(height: 2.h,),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                TextButton(
+                                  onPressed: () {
+                                    _taskService.delete(widget.task.id!, SqfliteConnection().idTask);
+                                    Navigator.of(context).pushAndRemoveUntil(
+                                      MaterialPageRoute(
+                                        builder: (context) => const HomeScreen(),
+                                      ),
+                                      (Route<dynamic> route) => false,
+                                    );
+                                  },
+                                  child: Text(
+                                    'Sim',
+                                    style: GoogleFonts.getFont(
+                                      'Montserrat',
+                                      textStyle: TextStyle(
+                                      fontSize: 2.vmax,
+                                      ),
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                                TextButton(
+                                  onPressed: (){
+                                    Navigator.of(context).pop();
+                                  }, 
+                                  child: Text(
+                                    'Não',
+                                    style: GoogleFonts.getFont(
+                                      'Montserrat',
+                                      textStyle: TextStyle(
+                                      fontSize: 2.vmax,
+                                      ),
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  );
+                }
+              );
+            }, 
+            icon: const Icon(Icons.clear, color: Colors.white,),
+          )
+        ],
         leading: IconButton(
           onPressed: () {
             if(_stopWatchStore.sessions > 0) {
@@ -77,13 +155,42 @@ class _StopWatchScreenState extends State<StopWatchScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Observer(builder: (_) {
-                return Text(
-                  'Sessões ativas: ${_stopWatchStore.sessions}',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20.0,
-                    fontWeight: FontWeight.bold,
-                  ),
+                return Column(
+                  children: [
+                    Text(
+                      'Atividade: ${widget.task.nameTask}',
+                      style: GoogleFonts.getFont(
+                         'Montserrat',
+                         textStyle: TextStyle(
+                         fontSize: 2.5.vmax,
+                         fontWeight: FontWeight.bold,
+                         color: const Color(0xffffffff),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      'Horário: ${widget.task.initHour} - ${widget.task.endHour}',
+                      style: GoogleFonts.getFont(
+                         'Montserrat',
+                         textStyle: TextStyle(
+                         fontSize: 2.5.vmax,
+                         fontWeight: FontWeight.bold,
+                         color: const Color(0xffffffff),
+                        ),
+                      ),
+                    ),
+                    Text(
+                      'Sessões ativas: ${_stopWatchStore.sessions}',
+                      style: GoogleFonts.getFont(
+                         'Montserrat',
+                         textStyle: TextStyle(
+                         fontSize: 2.5.vmax,
+                         fontWeight: FontWeight.bold,
+                         color: const Color(0xffffffff),
+                        ),
+                      ),
+                    ),
+                  ],
                 );
               }),
               SizedBox(

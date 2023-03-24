@@ -7,6 +7,7 @@ class RegistrationField extends RegistrationAbstract {
   bool? enable;
   GestureTapCallback? onTap;
   void Function(String)? onChanged;
+  String? Function(String?)? validator;
   RegistrationField({
     required String? nameField,
     this.controller,
@@ -14,13 +15,14 @@ class RegistrationField extends RegistrationAbstract {
     this.enable,
     this.onTap,
     this.onChanged,
+    required this.validator,
   }) : super(nameField: nameField);
 
   @override
   Widget build() {
     return GestureDetector(
       onTap: onTap,
-      child: TextField(
+      child: TextFormField(
         enabled: enable,
         controller: controller,
         decoration: InputDecoration(
@@ -29,6 +31,7 @@ class RegistrationField extends RegistrationAbstract {
           suffixIcon: iconButton,
         ),
         onChanged: onChanged,
+        validator: validator,
       ),
     );
   }
