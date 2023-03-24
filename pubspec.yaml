@@ -46,6 +46,8 @@ dependencies:
   google_fonts: ^4.0.3
   responsive_sizer: ^3.1.1
   touchable_opacity: ^1.2.0
+  flutter_launcher_icons: ^0.12.0
+  flutter_native_splash: ^2.2.19
 
 dev_dependencies:
   flutter_test:
@@ -82,7 +84,7 @@ flutter:
   # https://flutter.dev/assets-and-images/#from-packages
 flutter_icons:
   image_path: "assets/splash.jpg"
-  android: true
+  android: "launcher_icon"
   ios: true
   min_sdk_android: 21 # android min sdk min:16, default 21
   remove_alpha_ios: true
