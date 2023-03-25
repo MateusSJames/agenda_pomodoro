@@ -18,6 +18,7 @@ class SqfliteConnection implements IDbConnection<Database, Database> {
   String endHourTask = 'endHour';
   String sessionsTask = 'sessions';
   String durationTask = 'duration';
+  String isTask = 'isTask';
 
   factory SqfliteConnection() {
     // ignore: prefer_conditional_assignment
@@ -56,7 +57,8 @@ class SqfliteConnection implements IDbConnection<Database, Database> {
           $initHourTask TEXT,
           $endHourTask TEXT,
           $sessionsTask INTEGER,
-          $durationTask INTEGER
+          $durationTask INTEGER,
+          $isTask INTEGER
         )
       ''');
   }

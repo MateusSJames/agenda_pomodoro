@@ -23,6 +23,7 @@ class CalendarDayItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      onTap: () {},
       child: Box(
         width: 10.w,
         height: 7.h,

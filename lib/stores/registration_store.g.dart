@@ -153,12 +153,36 @@ mixin _$RegistrationStore on _RegistrationStore, Store {
     });
   }
 
+  late final _$isTaskAtom =
+      Atom(name: '_RegistrationStore.isTask', context: context);
+
+  @override
+  bool get isTask {
+    _$isTaskAtom.reportRead();
+    return super.isTask;
+  }
+
+  @override
+  set isTask(bool value) {
+    _$isTaskAtom.reportWrite(value, super.isTask, () {
+      super.isTask = value;
+    });
+  }
+
   late final _$insertTaskAsyncAction =
       AsyncAction('_RegistrationStore.insertTask', context: context);
 
   @override
   Future<void> insertTask(BuildContext context) {
     return _$insertTaskAsyncAction.run(() => super.insertTask(context));
+  }
+
+  late final _$updateTaskAsyncAction =
+      AsyncAction('_RegistrationStore.updateTask', context: context);
+
+  @override
+  Future<void> updateTask(BuildContext context, Tasks task) {
+    return _$updateTaskAsyncAction.run(() => super.updateTask(context, task));
   }
 
   late final _$getTasksTodayAsyncAction =
@@ -194,6 +218,17 @@ mixin _$RegistrationStore on _RegistrationStore, Store {
         name: '_RegistrationStore.setTaskName');
     try {
       return super.setTaskName(value);
+    } finally {
+      _$_RegistrationStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setIsTask() {
+    final _$actionInfo = _$_RegistrationStoreActionController.startAction(
+        name: '_RegistrationStore.setIsTask');
+    try {
+      return super.setIsTask();
     } finally {
       _$_RegistrationStoreActionController.endAction(_$actionInfo);
     }
@@ -265,7 +300,8 @@ endHourTask: ${endHourTask},
 session: ${session},
 duration: ${duration},
 loadingNewTask: ${loadingNewTask},
-loadingTasks: ${loadingTasks}
+loadingTasks: ${loadingTasks},
+isTask: ${isTask}
     ''';
   }
 }

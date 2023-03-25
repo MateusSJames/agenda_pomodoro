@@ -8,6 +8,7 @@ class CardTaskAbstract {
   String? initHour;
   String? endHour;
   Object? value;
+  int? isTask;
   void Function()? onDismissed;
 
   CardTaskAbstract(
@@ -15,6 +16,7 @@ class CardTaskAbstract {
     this.initHour,
     this.endHour,
     this.value,
+    this.isTask,
     this.onDismissed,
   );
 
@@ -37,10 +39,15 @@ class CardTaskAbstract {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.schedule,
-                  color: Colors.white,
-                ),
+                isTask == 0
+                    ? const Icon(
+                        Icons.schedule,
+                        color: Colors.white,
+                      )
+                    : const Icon(
+                        Icons.calendar_month,
+                        color: Colors.white,
+                      ),
                 Padding(
                   padding: EdgeInsets.symmetric(
                     horizontal: 20.0,
@@ -60,14 +67,23 @@ class CardTaskAbstract {
                       const SizedBox(
                         height: 5,
                       ),
-                      Text(
-                        '$initHour - $endHour',
-                        style: const TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.normal,
-                          color: Colors.white,
-                        ),
-                      ),
+                      isTask == 0
+                          ? Text(
+                              '$initHour - $endHour',
+                              style: const TextStyle(
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.white,
+                              ),
+                            )
+                          : Text(
+                              'Horário: $initHour',
+                              style: const TextStyle(
+                                fontSize: 15.0,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.white,
+                              ),
+                            ),
                     ],
                   ),
                 ),

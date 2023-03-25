@@ -42,9 +42,17 @@ abstract class _RegistrationStore with Store {
   @observable
   bool loadingTasks = false;
 
+  @observable
+  bool isTask = false;
+
   @action
   void setTaskName(value) {
     nameTask = value;
+  }
+
+  @action
+  void setIsTask() {
+    isTask = !isTask;
   }
 
   @action
@@ -82,6 +90,7 @@ abstract class _RegistrationStore with Store {
       endHour: endHourTask,
       sessions: session.round(),
       durationSession: duration.round(),
+      isTask: isTask ? 1 : 0,
     );
     await _taskService.insert(task);
     loadingNewTask = false;
@@ -100,6 +109,31 @@ abstract class _RegistrationStore with Store {
     session = 1;
     duration = 1;
     AlertAbstract('Tarefa cadastrada', 'A tarefa foi cadastrada com sucesso')
+        .create(context);
+  }
+
+  @action
+  Future<void> updateTask(BuildContext context, Tasks task) async {
+    loadingNewTask = true;
+    print(task.toJson());
+    await _taskService.update(task, SqfliteConnection().idTask);
+    loadingNewTask = false;
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(
+        builder: (context) => const HomeScreen(),
+      ),
+      (Route<dynamic> route) => false,
+    );
+    nameTask = '';
+    dateTask = '';
+    initHourTask = '';
+
+    endHourTask = '';
+
+    session = 1;
+    duration = 1;
+    AlertAbstract('Lembrete atualizado',
+            'As informações foram atualizadas com sucesso')
         .create(context);
   }
 

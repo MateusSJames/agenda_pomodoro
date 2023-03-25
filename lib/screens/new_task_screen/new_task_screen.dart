@@ -3,6 +3,7 @@ import 'package:agenda/factories/view/button_abstract.dart';
 // import 'package:agenda/factories/view/category_field.dart';
 import 'package:agenda/factories/view/registration_field.dart';
 import 'package:agenda/factories/view/slider_field.dart';
+import 'package:agenda/models/tasks.dart';
 import 'package:agenda/screens/home_screen/home_screen.dart';
 import 'package:agenda/stores/registration_store.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,11 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:intl/intl.dart';
 
 class NewTaskScreen extends StatefulWidget {
-  const NewTaskScreen({Key? key}) : super(key: key);
+  final Tasks? task;
+  const NewTaskScreen({
+    Key? key,
+    this.task,
+  }) : super(key: key);
 
   @override
   State<NewTaskScreen> createState() => _NewTaskScreenState();
@@ -28,6 +33,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   void initState() {
     _dateController.text = DateFormat('dd/MM/yyyy').format(DateTime.now());
     _registrationStore.setTaskDate(_dateController.text);
+    if (widget.task != null) {
+      _nameTaskController.text = widget.task!.nameTask!;
+      _dateController.text = widget.task!.dateTask!;
+      _initHourController.text = widget.task!.initHour!;
+    }
     super.initState();
   }
 
@@ -57,14 +67,35 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           child: Container(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
-            padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+            padding:
+                const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
             child: Column(
               children: [
+                Observer(builder: (_) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Checkbox(
+                          value: _registrationStore.isTask,
+                          onChanged: (value) {
+                            _registrationStore.setIsTask();
+                          }),
+                      const Text(
+                        'Lembrete',
+                        style: TextStyle(
+                          fontSize: 17.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  );
+                }),
+
                 RegistrationField(
                     controller: _nameTaskController,
                     nameField: 'Nome da tarefa',
                     validator: (value) {
-                      if(value!.isEmpty) {
+                      if (value!.isEmpty) {
                         return 'Informe o nome da tarefa';
                       }
                       return null;
@@ -79,8 +110,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     await _selectDateTask(_dateController, context);
                   },
                   validator: (value) {
-                    if(value!.isEmpty) {
-                        return 'Informe a data da tarefa';
+                    if (value!.isEmpty) {
+                      return 'Informe a data da tarefa';
                     }
                     return null;
                   },
@@ -98,7 +129,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                               .setTaskInitHour(_initHourController.text);
                         },
                         validator: (value) {
-                          if(value!.isEmpty) {
+                          if (value!.isEmpty) {
                             return 'Informe o horário de início';
                           }
                           return null;
@@ -115,10 +146,14 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                           controller: _endHourController,
                           enable: false,
                           validator: (value) {
-                            if(value!.isEmpty) {
-                              return 'Informe o horário de término';
+                            if (_registrationStore.isTask) {
+                              return null;
+                            } else {
+                              if (value!.isEmpty) {
+                                return 'Informe o horário de término';
+                              }
+                              return null;
                             }
-                            return null;
                           },
                           onTap: () async {
                             await _selectHourTask(_endHourController, context);
@@ -157,16 +192,40 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       color: colorAppBar,
                     );
                   } else {
-                    return ButtonAbstract(
-                      nameButton: 'Salvar',
-                      color: colorAppBar,
-                      colorText: Colors.white,
-                      onPressed: () {
-                        if(_formKey.currentState!.validate()) {
-                          _registrationStore.insertTask(context);
-                        }
-                      },
-                    ).create();
+                    if (widget.task != null) {
+                      return ButtonAbstract(
+                        nameButton: 'Atualizar',
+                        color: colorAppBar,
+                        colorText: Colors.white,
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            final task = Tasks(
+                              id: widget.task!.id,
+                              nameTask: _nameTaskController.text,
+                              dateTask: _dateController.text,
+                              initHour: _initHourController.text,
+                              endHour: '',
+                              sessions: _registrationStore.session.toInt(),
+                              durationSession:
+                                  _registrationStore.duration.toInt(),
+                              isTask: widget.task!.isTask,
+                            );
+                            _registrationStore.updateTask(context, task);
+                          }
+                        },
+                      ).create();
+                    } else {
+                      return ButtonAbstract(
+                        nameButton: 'Salvar',
+                        color: colorAppBar,
+                        colorText: Colors.white,
+                        onPressed: () {
+                          if (_formKey.currentState!.validate()) {
+                            _registrationStore.insertTask(context);
+                          }
+                        },
+                      ).create();
+                    }
                   }
                 }),
               ],

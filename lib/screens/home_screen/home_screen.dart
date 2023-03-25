@@ -36,25 +36,25 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Colors.white,
         toolbarHeight: 10.h,
         title: Box(
-            width: 70.w,
-            padding: EdgeInsets.only(left: 0.1.vmax),
-            child: Column(
-              children: [
-                Text(
-                  'Performance+',
-                  style: GoogleFonts.getFont(
-                    'Montserrat',
-                    textStyle: TextStyle(
-                      fontSize: 2.5.vmax,
-                      color: colorAppBar,
-                      fontWeight: FontWeight.w600,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+          width: 70.w,
+          padding: EdgeInsets.only(left: 0.1.vmax),
+          child: Column(
+            children: [
+              Text(
+                'Performance+',
+                style: GoogleFonts.getFont(
+                  'Montserrat',
+                  textStyle: TextStyle(
+                    fontSize: 2.5.vmax,
+                    color: colorAppBar,
+                    fontWeight: FontWeight.w600,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
+        ),
         actions: [
           IconButton(
             onPressed: () {
@@ -64,7 +64,10 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             },
             tooltip: 'Visualizar calendário',
-            icon: Icon(Icons.calendar_month, color: colorAppBar,),
+            icon: Icon(
+              Icons.calendar_month,
+              color: colorAppBar,
+            ),
           ),
         ],
       ),
@@ -97,152 +100,175 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: Align(
                                   alignment: Alignment.centerLeft,
                                   child: Text(
-                                      'Tarefas do dia',
-                                      style: GoogleFonts.getFont(
-                                        'Montserrat',
-                                        textStyle: TextStyle(
-                                          fontSize: 2.2.vmax,
-                                          fontWeight: FontWeight.w500,
-                                          color: colorAppBar,
-                                        ),
+                                    'Tarefas do dia',
+                                    style: GoogleFonts.getFont(
+                                      'Montserrat',
+                                      textStyle: TextStyle(
+                                        fontSize: 2.2.vmax,
+                                        fontWeight: FontWeight.w500,
+                                        color: colorAppBar,
                                       ),
                                     ),
-                                ),
-                              ),
-                              _registrationStore.tasks.isEmpty ?
-                              Box(
-                                height: 20.h,
-                                width: 90.w,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xfff3f3f3),
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(2.vmax),
                                   ),
                                 ),
-                                margin: EdgeInsets.only(left: 0.5.vmax, right: 0.5.vmax),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Icon(
-                                      Icons.calendar_month_sharp,
-                                      color: const Color(0xff8B9296),
-                                      size: 3.5.vmax,
-                                    ),
-                                    Center(
-                                      child: Text(
-                                        'Até o momento, você não tem nenhuma tarefa para concluir',
-                                        textAlign: TextAlign.center,
-                                        style: GoogleFonts.getFont(
-                                          'Montserrat',
-                                          textStyle: TextStyle(
-                                            fontSize: 1.8.vmax,
-                                            fontWeight: FontWeight.w500,
-                                            color: const Color(0xff1F2E36),
-                                          ),
+                              ),
+                              _registrationStore.tasks.isEmpty
+                                  ? Box(
+                                      height: 20.h,
+                                      width: 90.w,
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xfff3f3f3),
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(2.vmax),
                                         ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ) : CarouselSlider(
-                                  items: _registrationStore.tasks.map((index) {
-                                    return Builder(
-                                      builder: (BuildContext context) {
-                                        return GestureDetector(
-                                          onTap: () {
-                                            Navigator.of(context).pushAndRemoveUntil(
-                                              MaterialPageRoute(
-                                                builder: (context) => StopWatchScreen(
-                                                  task: index,
+                                      margin: EdgeInsets.only(
+                                          left: 0.5.vmax, right: 0.5.vmax),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceAround,
+                                        children: [
+                                          Icon(
+                                            Icons.calendar_month_sharp,
+                                            color: const Color(0xff8B9296),
+                                            size: 3.5.vmax,
+                                          ),
+                                          Center(
+                                            child: Text(
+                                              'Até o momento, você não tem nenhuma tarefa para concluir',
+                                              textAlign: TextAlign.center,
+                                              style: GoogleFonts.getFont(
+                                                'Montserrat',
+                                                textStyle: TextStyle(
+                                                  fontSize: 1.8.vmax,
+                                                  fontWeight: FontWeight.w500,
+                                                  color:
+                                                      const Color(0xff1F2E36),
                                                 ),
                                               ),
-                                              (Route<dynamic> route) => false,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  : CarouselSlider(
+                                      items:
+                                          _registrationStore.tasks.map((index) {
+                                        return Builder(
+                                          builder: (BuildContext context) {
+                                            return GestureDetector(
+                                              onTap: () {
+                                                if (index.isTask == 1) {
+                                                  showModalBottomSheet(
+                                                    context: context,
+                                                    builder: (context) {
+                                                      return SizedBox(
+                                                        height: 20.h,
+                                                        child: Center(
+                                                          child: Column(
+                                                            children: [
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  _registrationStore
+                                                                      .deleteTask(
+                                                                          index
+                                                                              .id!);
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pop();
+                                                                },
+                                                                child: Text(
+                                                                  'Concluir Lembrete',
+                                                                  style: GoogleFonts
+                                                                      .getFont(
+                                                                    'Montserrat',
+                                                                    textStyle:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          1.8.vmax,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              TextButton(
+                                                                onPressed: () {
+                                                                  Navigator.of(
+                                                                          context)
+                                                                      .pushAndRemoveUntil(
+                                                                    MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              NewTaskScreen(
+                                                                        task:
+                                                                            index,
+                                                                      ),
+                                                                    ),
+                                                                    (Route<dynamic>
+                                                                            route) =>
+                                                                        false,
+                                                                  );
+                                                                },
+                                                                child: Text(
+                                                                  'Atualizar informações',
+                                                                  style: GoogleFonts
+                                                                      .getFont(
+                                                                    'Montserrat',
+                                                                    textStyle:
+                                                                        TextStyle(
+                                                                      fontSize:
+                                                                          1.8.vmax,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      );
+                                                    },
+                                                  );
+                                                } else {
+                                                  Navigator.of(context)
+                                                      .pushAndRemoveUntil(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          StopWatchScreen(
+                                                        task: index,
+                                                      ),
+                                                    ),
+                                                    (Route<dynamic> route) =>
+                                                        false,
+                                                  );
+                                                }
+                                              },
+                                              child: CardTaskAbstract(
+                                                index.nameTask!,
+                                                index.initHour,
+                                                index.endHour,
+                                                index,
+                                                index.isTask,
+                                                () {
+                                                  _registrationStore
+                                                      .deleteTask(index.id!);
+                                                },
+                                              ).create(context),
                                             );
                                           },
-                                          child: CardTaskAbstract(
-                                            index.nameTask!,
-                                            index.initHour,
-                                            index.endHour,
-                                            index,
-                                            () {
-                                              _registrationStore.deleteTask(
-                                                  index.id!);
-                                            },
-                                          ).create(context),
                                         );
-                                      },
-                                    );
-                                  }).toList(),
-                                  options: CarouselOptions(height: 20.h),
-                                )
+                                      }).toList(),
+                                      options: CarouselOptions(height: 20.h),
+                                    )
                             ],
                           ),
                         ),
                       ],
                     );
-                    // if (_registrationStore.tasks.isEmpty) {
-                    //   return Column(
-                    //     children: [
-                    //       SizedBox(
-                    //         height: MediaQuery.of(context).size.height * 0.1,
-                    //       ),
-                    //       Icon(
-                    //         Icons.fact_check,
-                    //         color: Colors.grey[300],
-                    //         size: MediaQuery.of(context).size.height * 0.25,
-                    //       ),
-                    //       const Text(
-                    //         'Você não tem nenhuma tarefa \npara hoje',
-                    //         textAlign: TextAlign.center,
-                    //         style: TextStyle(
-                    //           fontSize: 20.0,
-                    //           fontWeight: FontWeight.bold,
-                    //         ),
-                    //       ),
-                    //       const SizedBox(
-                    //         height: 20,
-                    //       ),
-                    //       Text(
-                    //         'Uau, você não tem nenhuma tarefa prevista para hoje, mas você pode cadastrar novas agora mesmo.',
-                    //         textAlign: TextAlign.center,
-                    //         style: TextStyle(
-                    //           fontSize: 17.0,
-                    //           color: Colors.grey[500],
-                    //         ),
-                    //       ),
-                    //     ],
-                    //   );
-                    // } else {
-                    //   return Expanded(
-                    //     child: ListView.builder(
-                    //         itemCount: _registrationStore.tasks.length,
-                    //         itemBuilder: (context, index) {
-                    //           return GestureDetector(
-                    //             onTap: () {
-                    //               Navigator.of(context).pushAndRemoveUntil(
-                    //                 MaterialPageRoute(
-                    //                   builder: (context) => StopWatchScreen(
-                    //                     task: _registrationStore.tasks[index],
-                    //                   ),
-                    //                 ),
-                    //                 (Route<dynamic> route) => false,
-                    //               );
-                    //             },
-                    //             child: CardTaskAbstract(
-                    //               _registrationStore.tasks[index].nameTask!,
-                    //               _registrationStore.tasks[index].initHour,
-                    //               _registrationStore.tasks[index].endHour,
-                    //               _registrationStore.tasks[index],
-                    //               (value) {
-                    //                 _registrationStore.deleteTask(
-                    //                     _registrationStore.tasks[index].id!);
-                    //               },
-                    //             ).create(context),
-                    //           );
-                    //           //return Text(_registrationStore.tasks[index].nameTask!);
-                    //         }),
-                    //   );
-                    // }
                   }
                 }),
               ],
